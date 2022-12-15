@@ -1,8 +1,6 @@
 ## Data bindings for thermometer and readout
 
-This answer uses a [Minimal Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example) that substitures a "mock" version of the `WebClient` in order to focus on makeing your `WeatherClient` class a binding source by implementing the `INotifyPropertyChanged` interface.
-
-One observation about your code is that the `generationtime_ms` property fires `OnPropertyChanged` _whether it really changes or not_ so fix that first. Here's an example of `WeatherClient` that appends the `INotifyPropertyChanged` interface to the class declaration, then exposes two bindable properties, `Temperature` and `Color`. Note that this data "model" now handles its own `Color` property based on changes of the `Temperature` property.
+This answer uses a [Minimal Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example) that substitutes a "mock" version of the `WebClient` in order to focus on turning your `WeatherClient` class into a binding source by implementing `INotifyPropertyChanged` interface. One thing I noticed in your code is that the `generationtime_ms` property fires `OnPropertyChanged` _whether it really changes or not_ so fix that first. Here's an example of `WeatherClient` that appends the `INotifyPropertyChanged` interface to the class declaration, then exposes two bindable properties, `Temperature` and `Color`. Note that this data "model" now handles its own `Color` property based on changes of the `Temperature` property.
 
     class WeatherClient : INotifyPropertyChanged
     {
@@ -63,6 +61,8 @@ One observation about your code is that the `generationtime_ms` property fires `
 
 Now you can use your `WeatherClient` as a binding source to do various actions in the Main Form by adding bindings that reference it.
 
+[![screenshots][1]][1]
+
     public partial class MainForm : Form
     {
         public MainForm() => InitializeComponent();
@@ -117,5 +117,6 @@ Now you can use your `WeatherClient` as a binding source to do various actions i
         private readonly WeatherClient _weatherClient = new WeatherClient();
     }
 
+I hope this helps clarify the relationship of binding properties as they relate to what you're trying to do.
 
-
+  [1]: https://i.stack.imgur.com/ACJrb.png
