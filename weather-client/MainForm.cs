@@ -59,26 +59,6 @@ namespace weather_client
     }
     class WeatherClient : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            switch (propertyName)
-            {
-                case nameof(Temperature):
-                    if (Temperature < 32)
-                    {
-                        Color = Color.Blue;
-                    }
-                    else if (Temperature > 75)
-                    {
-                        Color = Color.Red;
-                    }
-                    else Color = Color.Green;
-                    break;
-            }
-        }
-
         double _temperature = 0;
         public double Temperature
         {
@@ -111,6 +91,25 @@ namespace weather_client
             Temperature = _rando.NextDouble() * 100;
         }
         Random _rando = new Random(2);
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            switch (propertyName)
+            {
+                case nameof(Temperature):
+                    if (Temperature < 32)
+                    {
+                        Color = Color.Blue;
+                    }
+                    else if (Temperature > 75)
+                    {
+                        Color = Color.Red;
+                    }
+                    else Color = Color.Green;
+                    break;
+            }
+        }
     }
     class VerticalProgressBar : ProgressBar
     {

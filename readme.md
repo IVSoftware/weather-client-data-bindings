@@ -1,31 +1,11 @@
 ## Data bindings for thermometer and readout
 
-This answer uses a [Minimal Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example) that substitures a "mock" version of the ~WebClient` in order to focus on how to make your `WeatherClient` class a binding source by implementing the `INotifyPropertyChanged` interface.
+This answer uses a [Minimal Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example) that substitures a "mock" version of the `WebClient` in order to focus on how to make your `WeatherClient` class a binding source by implementing the `INotifyPropertyChanged` interface.
 
 One observation about your code is that the `generationtime_ms` property fires `OnPropertyChanged` _whether it really changes or not_ so fix that first. Here's an example of `WeatherClient` that appends the `INotifyPropertyChanged` interface to the class declaration, then exposes two bindable properties, `Temperature` and `Color`. Note that this data "model" now handles its own `Color` property based on changes of the `Temperature` property.
 
     class WeatherClient : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            switch (propertyName)
-            {
-                case nameof(Temperature):
-                    if (Temperature < 32)
-                    {
-                        Color = Color.Blue;
-                    }
-                    else if (Temperature > 75)
-                    {
-                        Color = Color.Red;
-                    }
-                    else Color = Color.Green;
-                    break;
-            }
-        }
-
         double _temperature = 0;
         public double Temperature
         {
@@ -58,6 +38,25 @@ One observation about your code is that the `generationtime_ms` property fires `
             Temperature = _rando.NextDouble() * 100;
         }
         Random _rando = new Random(2);
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            switch (propertyName)
+            {
+                case nameof(Temperature):
+                    if (Temperature < 32)
+                    {
+                        Color = Color.Blue;
+                    }
+                    else if (Temperature > 75)
+                    {
+                        Color = Color.Red;
+                    }
+                    else Color = Color.Green;
+                    break;
+            }
+        }
     }
 
 ***
